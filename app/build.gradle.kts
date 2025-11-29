@@ -42,13 +42,13 @@ android {
 dependencies {
 
 // --------------------------------------------------------------------------
-// 1. Core Kotlin & Android Dependencies
+// Core Kotlin & Android Dependencies
 // --------------------------------------------------------------------------
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
 // --------------------------------------------------------------------------
-// 2. Compose Setup & UI
+// Compose Setup & UI
 // --------------------------------------------------------------------------
 // Compose BOM (Always use platform() for the Bill of Materials)
     implementation(platform(libs.androidx.compose.bom))
@@ -61,19 +61,31 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
 
 // --------------------------------------------------------------------------
-// 3. Navigation
+// Navigation
 // --------------------------------------------------------------------------
     implementation(libs.androidx.navigation.compose)
 
 // --------------------------------------------------------------------------
-// 4. Dependency Injection (Koin)
+// Dependency Injection (Koin)
 // --------------------------------------------------------------------------
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
 
+// --------------------------------------------------------------------------
+// Networking (Ktor & Serialization)
+// --------------------------------------------------------------------------
+// Ktor Client Core
+    implementation(libs.ktor.client.core)
+    // Ktor Android Engine
+    implementation(libs.ktor.client.android)
+    // Ktor WebSocket Feature
+    implementation(libs.ktor.client.websockets)
+    // Kotlinx Serialization for JSON
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
 // --------------------------------------------------------------------------
-// 5. Testing
+// Testing
 // --------------------------------------------------------------------------
 // Unit Testing
     testImplementation(libs.junit)
@@ -86,7 +98,7 @@ dependencies {
 
 
 // --------------------------------------------------------------------------
-// 6. Debug/Tooling
+// Debug/Tooling
 // --------------------------------------------------------------------------
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
