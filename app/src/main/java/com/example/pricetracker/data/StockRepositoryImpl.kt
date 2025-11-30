@@ -56,15 +56,11 @@ class StockRepositoryImpl(
         startFeed()
     }
 
-    override fun toggleFeed() {
+    override fun connectFeed() {
 
-        if (connectionStatus.value) {
+        startFeed()
 
-            disconnectFeed()
-        } else {
-
-            startFeed()
-        }
+        _connectionStatus.value = true
     }
 
     override fun disconnectFeed() {
@@ -79,5 +75,13 @@ class StockRepositoryImpl(
         if (connectionStatus.value) return // Already running
 
         client.connect(_stockUpdates.value)
+    }
+
+    override fun getStockBySymbol(symbol: String): Flow<StockItem?> {
+
+        return _stockUpdates
+            .map { list ->
+                list.find { it.symbol.equals(symbol, ignoreCase = true) }
+            }
     }
 }

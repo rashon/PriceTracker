@@ -10,7 +10,9 @@ interface StockRepository {
 
     val stockFeed: Flow<List<StockItem>>
 
-    fun toggleFeed()
+    fun connectFeed()
 
     fun disconnectFeed()
+
+    fun getStockBySymbol(symbol: String): Flow<StockItem?>
 }
