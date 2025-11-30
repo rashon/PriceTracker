@@ -34,12 +34,9 @@ class FeedVM(
         initialValue = StockFeedState(isLoading = true)
     )
 
-    fun toggleFeed() {
+    fun toggleFeed(isActive: Boolean) {
+        isLiveUpdateEnabled.value = isActive
 
         if (isLiveUpdateEnabled.value) repository.connectFeed() else repository.disconnectFeed()
-    }
-
-    fun disconnectFeed() {
-        repository.disconnectFeed()
     }
 }

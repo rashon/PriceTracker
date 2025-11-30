@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 
 class StockRepositoryImpl(
@@ -24,9 +25,10 @@ class StockRepositoryImpl(
 
             StockItem(
                 symbol = symbol,
-                currentPrice = String.format("%.2f", basePrice).toDouble(),
+                currentPrice = String.format(Locale.US, "%.2f", basePrice).toDouble(),
                 lastChange = 0.0,
-                description = StockConstants.getDescription(symbol)
+                description = StockConstants.getDescription(symbol),
+                name = StockConstants.getName(symbol)
             )
         }
     }

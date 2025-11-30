@@ -9,6 +9,7 @@ package com.example.pricetracker.domain.model
  */
 data class StockItem(
     val symbol: String,
+    val name: String,
     val currentPrice: Double,
     val lastChange: Double,
     val description: String,

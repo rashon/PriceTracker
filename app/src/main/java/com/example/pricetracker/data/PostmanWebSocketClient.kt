@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
+import java.util.Locale
 import kotlin.random.Random
 
 private const val WEBSOCKET_HOST = "ws.postman-echo.com"
@@ -189,8 +190,8 @@ class PostmanEchoWebSocketClient(
         val newPrice = (oldStock.currentPrice + change).coerceAtLeast(0.01)
 
         return oldStock.copy(
-            currentPrice = String.format("%.2f", newPrice).toDouble(),
-            lastChange = String.format("%.2f", change).toDouble(),
+            currentPrice = String.format(Locale.US, "%.2f", newPrice).toDouble(),
+            lastChange = String.format(Locale.US, "%.2f", change).toDouble(),
             timestamp = System.currentTimeMillis()
         )
     }

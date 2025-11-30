@@ -72,3 +72,6 @@ val surfaceContainerLowDark = Color(0xFF191C20)
 val surfaceContainerDark = Color(0xFF1D2024)
 val surfaceContainerHighDark = Color(0xFF282A2F)
 val surfaceContainerHighestDark = Color(0xFF33353A)
+
+val greenIndicator = Color(0xFF4CAF50) // Material Green 500
+val redIndicator = Color(0xFFF44336)   // Material Red 500
