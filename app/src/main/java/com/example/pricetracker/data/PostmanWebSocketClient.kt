@@ -1,12 +1,15 @@
 package com.example.pricetracker.data
 
+import android.util.Log
 import com.example.pricetracker.domain.model.StockItem
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.http.HttpMethod
+import io.ktor.http.URLProtocol
+import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession
@@ -24,7 +27,9 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
-private const val WEBSOCKET_URL = "wss://ws.postman-echo.com/raw"
+private const val WEBSOCKET_HOST = "ws.postman-echo.com"
+private const val WEBSOCKET_PORT = 443
+private const val WEBSOCKET_PATH = "/raw"
 private const val UPDATE_INTERVAL_MS = 2000L
 
 class PostmanEchoWebSocketClient(
@@ -43,10 +48,8 @@ class PostmanEchoWebSocketClient(
 
     var session: WebSocketSession? = null
 
-    private val client = HttpClient(Android) {
-
+    private val client = HttpClient(OkHttp) {
         install(WebSockets)
-
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -67,13 +70,16 @@ class PostmanEchoWebSocketClient(
 
                 if (session == null) {
 
-                    session = client.webSocketSession(
-                        method = HttpMethod.Get,
-                        host = "ws.postman-echo.com",
-                        path = "/raw"
-                    )
+                    session = client.webSocketSession {
+                        method = HttpMethod.Get
+                        url {
+                            protocol = URLProtocol.WSS // Ensures secure connection (port 443)
+                            host = WEBSOCKET_HOST
+                            port = WEBSOCKET_PORT
+                            path(WEBSOCKET_PATH)
+                        }
+                    }
 
-                    println("Connected to $WEBSOCKET_URL successfully. Starting send/receive jobs.")
                 }
 
                 session?.let {
@@ -86,7 +92,7 @@ class PostmanEchoWebSocketClient(
 
             } catch (e: Exception) {
 
-                println("WebSocket Connection Error: ${e.message}")
+                Log.e("WS_CLIENT", "WebSocket Connection Error: ${e.message}")
 
                 disconnect()
             } finally {
@@ -130,8 +136,7 @@ class PostmanEchoWebSocketClient(
                 }
             }
         } catch (e: Exception) {
-
-            println("WebSocket Receiving Error: ${e.message}")
+            Log.e("WS_CLIENT", "WebSocket Receiving Error: ${e.message}")
         }
     }
 
@@ -158,23 +163,21 @@ class PostmanEchoWebSocketClient(
                     val jsonMessage = Json.encodeToString(updateDto)
 
                     session.send(Frame.Text(jsonMessage))
-
-                    println("WebSocket Sent: $jsonMessage")
                 }
             }
         } catch (e: Exception) {
 
-            println("WebSocket Sending Error: ${e.message}")
+            Log.e("WS_CLIENT", "WebSocket Sending Error: ${e.message}")
         }
     }
 
     override fun disconnect() {
         // Cancel all associated jobs and close the client
         connectionJob?.cancel()
+        session = null
         sendJob?.cancel()
         receiveJob?.cancel()
         client.close()
-        println("Disconnected from $WEBSOCKET_URL and client closed.")
     }
 
     /**

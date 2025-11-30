@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+        Allowing cleartext traffic for a specific domain.
+        This is necessary if the Android OS misinterprets the wss:// traffic
+        or if the server forces a fallback to ws:// for some negotiation phase.
+        We only apply this for the specific domain used for testing.
+    -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">ws.postman-echo.com</domain>
+    </domain-config>
+
+    <!-- Block cleartext traffic for all other domains (default setting) -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

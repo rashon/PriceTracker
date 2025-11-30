@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -80,9 +81,11 @@ dependencies {
     implementation(libs.ktor.client.android)
     // Ktor WebSocket Feature
     implementation(libs.ktor.client.websockets)
+    implementation(libs.ktor.client.okhttp)
     // Kotlinx Serialization for JSON
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.ktor.serialization.kotlinx.json)
 
 // --------------------------------------------------------------------------
 // Testing
