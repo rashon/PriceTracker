@@ -93,6 +93,9 @@ dependencies {
 // --------------------------------------------------------------------------
 // Unit Testing
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test) // For coroutines
+    testImplementation(libs.turbine)
 
 // Instrumentation Testing (Android/Compose UI tests)
     androidTestImplementation(libs.androidx.junit)
