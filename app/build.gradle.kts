@@ -38,6 +38,14 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md" // <-- Added this line
+            excludes += "META-INF/licenses/**" // Often good practice to add this as well
+        }
+    }
 }
 
 dependencies {
@@ -102,6 +110,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.mockk.android)
 
 
 // --------------------------------------------------------------------------
